@@ -5,7 +5,7 @@
 Nesta atividade vamos tentar explorar um pouco a metodologia doze-fatores. 
 
 - Considerando os 12 fatores, como seria a forma usando Genexus e/ou ASP.NET Core para seguir os padrões apresentados?
-Apresente quais práticas e ferramentas seriam necessárias para implementar as práticas. 
+Apresente quais práticas e ferramentas seriam necessárias para implementar os doze fatores. 
   
 | Fator                | Prática / Ferramenta                                             |
 | -------------------- | ---------------------------------------------------------------- |
