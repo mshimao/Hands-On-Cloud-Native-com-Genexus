@@ -6,10 +6,16 @@ Nesta atividade vamos tentar explorar um pouco quais são as implicações das 8
 
 - Quais itens dos 8 pontos podem ser atacados no momento do desenho da aplicação, para diminuir os impactos deles? Quais técnicas o desenvolvedor deve usar?
   
-| Falácia            | O que pode ser feito |
-| ------------------ | -------------------- |
-| A rede é confiável |                      |
-
+| Falácia                                | O que pode ser feito                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| A rede é confiável                     |                                                                                                              |
+| A latência é zero                      |                                                                                                              |
+| A largura de banda é infinita          |                                                                                                              |
+| A rede é segura                        | Exemplo: não armazernar informações de conexão em arquivos, utilizar cofres de chaves como o Azure Key Vault |
+| A topologia da rede nunca muda         |                                                                                                              |
+| Existe um administrador                |                                                                                                              |
+| Custo de transferência de dados é zero |                                                                                                              |
+| A rede é homogênea                     |                                                                                                              |
 
 
 
