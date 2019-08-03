@@ -1,4 +1,4 @@
-# Hands-On Docker Cloud Native com Genexus
+# Hands-On Cloud Native e Genexus
 
 Hands-On para introdução dos conceitos da arquitetura Cloud Native e sua utilização com o Genexus.
 
