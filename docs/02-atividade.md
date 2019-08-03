@@ -19,4 +19,4 @@ Nesta atividade vamos tentar explorar um pouco quais são as implicações das 8
 
 - [Explicando as falácias](pdfs/explicando_falacias.pdf)
 
-Próxima: [Atividade 02](02-atividade.md)
+Próxima: [Atividade 03](03-atividade.md)
