@@ -2,7 +2,7 @@
 
 Hands-On para introdução dos conceitos da arquitetura Cloud Native e sua utilização com o Genexus.
 
-Para esse Hands-On vamos utilizar o Docker para criar os ambientes de testes. Não é necessário conhecimento anterior em Docker para executar o Hands-On.
+Para este Hands-On vamos utilizar o Docker para criar os ambientes de testes. Não é necessário conhecimento anterior em Docker para executar o Hands-On.
 
 ### Instalando o Docker
 
@@ -21,5 +21,11 @@ Após a leitura e configuração dos requisitos, agora é fazer o download do Do
 - [Download do Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 
 Com isso temos o ambiente preparado para executar os contêineres Docker.
+
+## Genexus .NET Core
+
+Para este Hands-On vamos utilizar também o gerador .Net Core, então é necessário instalar os requisitos do gerador.
+
+- [Requisitos do Gerador .Net Core](https://wiki.genexus.com/commwiki/servlet/wiki?38605,.Net+Core+Generator+Requirements)
 
 Próximo: [Atividade 01](docs/01-atividade.md)
