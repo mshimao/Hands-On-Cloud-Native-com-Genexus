@@ -15,7 +15,7 @@ Fazer o download do arquivo atividade4.zip, descompactar e copiar os arquivos do
 
 - [atividade4.zip](https://github.com/mshimao/Hands-On-Cloud-Native-com-Genexus/blob/master/docs/atividade/atividade4.zip)
 
-Abra o arquivo docker-compose.yml, neste arquivo está sendo criado uma rede com dois nós um rodando o Nginx e outro um serviço ASP.NET Core.
+Abra o arquivo docker-compose.yml, neste arquivo está sendo criado uma rede com dois nós, um rodando o Nginx e outro um serviço ASP.NET Core feito em Genexus.
 
 ```yaml
 version: '3'
@@ -130,7 +130,7 @@ Removing atividade4_apigx01_1 ... done
 Removing network atividade4_proxygx-network
 ```
 
-Vamos agora esconder o nó que está executando a api e repetir os testes. Para isso, edite o arquivo docker-compose.yml, e remova a declaração da porta do nó apigx01.
+Vamos agora esconder o nó que está executando a api e repetir os testes. Para isso, edite o arquivo docker-compose.yml, e remova a declaração da porta do nó apigx01     `ports: - "20001:80"`.
 
 ```yaml
   apigx01:
