@@ -11,6 +11,9 @@ Mais informações:
 
 Crie uma pasta chamada Handoncloud na raiz da sua unidade de disco C: ou D:, dentro dela crie uma pasta chamada Atividade4.
 
+Fazer o download do arquivo atividade4.zip, descompactar e copiar os arquivos docker-compose.yml e Dockerfile para a pasta Atividade4.
+
+- [atividade4.zip](https://github.com/mshimao/Hands-On-Cloud-Native-com-Genexus/blob/master/docs/atividade/atividade4.zip)
 
 
 
