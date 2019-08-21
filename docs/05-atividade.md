@@ -6,112 +6,173 @@ Nesta atividade vamos configurar um Api Gateway para uma api .NET Core. Usaremos
 
 Dentro da pasta Handoncloud crie uma pasta chamada Atividade5.
 
-Fazer o download do arquivo atividade4.zip, descompactar e copiar os arquivos docker-compose.yml e Dockerfile para a pasta Atividade4.
+Fazer o download do arquivo atividade5.zip, descompactar e copiar o arquivo docker-compose.yml e Dockerfile para a pasta Atividade5.
 
-- [atividade4.zip](https://github.com/mshimao/Hands-On-Cloud-Native-com-Genexus/blob/master/docs/atividade/atividade4.zip)
+- [atividade5.zip](https://github.com/mshimao/Hands-On-Cloud-Native-com-Genexus/blob/master/docs/atividade/atividade5.zip)
 
-Abra o arquivo docker-compose.yml, neste arquivo está sendo criado uma rede com dois nós, um rodando o Nginx e outro um serviço ASP.NET Core feito em Genexus.
+Abra o arquivo docker-compose.yml, neste arquivo está sendo criado uma rede com o Kong API, o PostgreSQL, o Konga (UI para administração do Kong) e a API de soma.
 
 ```yaml
-version: '3'
+version: "3"
+
+networks:
+ kong-net:
+  driver: bridge
 
 services:
-  proxy:
-    image: proxygx-nginx
-    build:
-      context: .
-    ports:
-      - "9999:80"
-    depends_on:
-      - apigx01
+
+  #######################################
+  # Postgres: The database used by Kong
+  #######################################
+  kong-database:
+    image: postgres:9.6
+    restart: always
     networks:
-      - proxygx-network
-  
+      - kong-net
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  #######################################
+  # Kong database migration
+  #######################################
+  kong-migration:
+    image: kong:latest
+    command: "kong migrations bootstrap"
+    networks:
+      - kong-net
+    restart: on-failure
+    environment:
+      KONG_PG_HOST: kong-database
+    links:
+      - kong-database
+    depends_on:
+      - kong-database
+
+  #######################################
+  # Kong: The API Gateway
+  #######################################
+  kong:
+    image: kong:latest
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      KONG_PG_HOST: kong-database
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_PROXY_LISTEN_SSL: 0.0.0.0:8443
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    depends_on:
+      - kong-migration
+      - kong-database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://kong:8001"]
+      interval: 5s
+      timeout: 2s
+      retries: 15
+    ports:
+      - "8001:8001"
+      - "8000:8000"
+
+  #######################################
+  # Konga database prepare
+  #######################################
+  konga-prepare:
+    image: pantsel/konga:next
+    command: "-c prepare -a postgres -u postgresql://kong@kong-database:5432/konga_db"
+    networks:
+      - kong-net
+    restart: on-failure
+    links:
+      - kong-database
+    depends_on:
+      - kong-database
+
+  #######################################
+  # Konga: Kong GUI
+  #######################################
+  konga:
+    image: pantsel/konga:next
+    restart: always
+    networks:
+        - kong-net
+    environment:
+      DB_ADAPTER: postgres
+      DB_HOST: kong-database
+      DB_USER: kong
+      TOKEN_SECRET: km1GUr4RkcQD7DewhJPNXrCuZwcKmqjb
+      DB_DATABASE: konga_db
+      NODE_ENV: production
+    depends_on:
+      - kong-database
+    ports:
+      - "1337:1337"
+
+  #######################################
+  # API GX: api soma
+  #######################################
+
   apigx01:
     image: mkshimao/handsoncloudgx
-    ports:
-      - "20001:80"
     networks:
-      - proxygx-network
-  
-
-networks: 
-    proxygx-network:
-      driver: bridge
+      - kong-net
 ```
-
-O nó proxygx-nginx será gerado através do build do arquivo Dockerfile. A imagem usada é o nginx e durante o build o arquivo de configuração do Nginx é substituido.
-
-```bash
-FROM nginx
-EXPOSE 80
-RUN rm /etc/nginx/nginx.conf
-COPY nginx.conf /etc/nginx/nginx.conf
-```
-
-Agora crie na pasta Atividade4 um arquivo chamado nginx.conf para configurar o Nginx com o seguinte conteúdo:
-
-```yaml
-events { worker_connections 1024; }
-
-http {
-     upstream apigx {
-        server apigx01;
-    }
-
-    server {
-        listen 80;
-        location / {
-            proxy_pass http://apigx;
-        }
-    }
-}
-```
-
-Neste arquivo está sendo configurado o Nginx para encaminhar as requisições da porta 80 para o endereço apigx que está apontando para o servidor apigx01 que foi configurado no docker-compose. 
 
 Execute o comando `docker-compose up -d` para subir as imagens do docker.
 ```bat
-C:\HandsOnCloud\Atividade4
-λ docker-compose up -d
-Creating atividade4_apigx01_1 ... done
-Creating atividade4_proxy_1   ... done
-```
-
-Ao executar o comando `docker network ls`, será listado a rede **atividade4_proxygx-network**.
-
-```bat
-C:\HandsOnCloud\Atividade4
-λ  docker network ls
-NETWORK ID          NAME                         DRIVER              SCOPE
-82bc1989fe15        atividade4_proxygx-network   bridge              local
-3cd62acdca03        bridge                       bridge              local
-308f174ba3a3        host                         host                local
-f03e2c44fa09        none                         null                local
+C:\HandsOnCloud\Atividade5>docker-compose up -d
+Creating network "atividade5_kong-net" with driver "bridge"
+Creating atividade5_apigx01_1       ... done 
+Creating atividade5_kong-database_1 ... done
+Creating atividade5_konga_1          ... done
+Creating atividade5_konga-prepare_1  ... done
+Creating atividade5_kong-migration_1 ... done
+Creating atividade5_kong_1           ... done 
 ```
 
 Ao executar o comando `docker-compose ps` serão listados os contêineres criados.
 
-```bash
-C:\HandsOnCloud\Atividade4
-λ docker-compose ps
-       Name                     Command               State           Ports
------------------------------------------------------------------------------------
-atividade4_apigx_1   dotnet bin/GxNetCoreStartu ...   Up      0.0.0.0:20001->80/tcp
-atividade4_proxy_1   nginx -g daemon off;             Up      0.0.0.0:20000->80/tcp
+```bat
+C:\HandsOnCloud\Atividade5>docker-compose ps
+           Name                          Command                State     Ports                                                                                         
+-------------------------------------------------------------------------------                                                                                         
+atividade5_apigx01_1          dotnet bin/GxNetCoreStartu ...   Exit 255                                                                                                 
+atividade5_kong-database_1    docker-entrypoint.sh postgres    Exit 255                                                                                                 
+atividade5_kong-migration_1   /docker-entrypoint.sh kong ...   Exit 0                                                                                                   
+atividade5_kong_1             /docker-entrypoint.sh kong ...   Exit 255                                                                                                 
+atividade5_konga-prepare_1    /app/start.sh -c prepare - ...   Exit 0                                                                                                   
+atividade5_konga_1            /app/start.sh                    Exit 255                                                                          
 ```
+Abra o browser e digite o endereço http://localhost:1337. Preencha os campos com as seguintes informações:
+- Username: admin
+- Email: admin@teste.com
+- Password: adminagl
 
-No nó apigx está publicado uma api rest feita em Genexus, que recebe 2 valores e devolve a soma.
+![konga](imagens/konga.png)
 
-![api GX](imagens/somaapi.png)
+Para connectar a interface de Administração ao Kong, temos que configurar a conexão com a api de administração do Kong. Clique na opção CONNECTIONS do menu lateral e posteriomente no botão NEW CONNECTION.
 
-Para efeitos de testes a api está acessível na porta 20001. Vamos usar o Postman para acessar a API, o endereço é http://localhost:20001/rest/soma.
+![konga connection](imagens/kongaconn.png)
 
-![teste soma API](imagens/testesomaapi.png)
+Preencha o nome com "Default" e a url com "http://kong:8001", clique em "CREATE CONNECTION".
 
-Agora vamos testar se o Nginx está configurado corretamente, ele está exposto com a porta 9999, http://localhost:9999/rest/soma.
+![konga default connection](imagens/kongadefaultconn.png)
 
-![teste nginx](imagens/testenginx.png)
+A conexão com o Kong deverá aparecer ativada.
+
+![konga default connection ok](imagens/kongaconnok.png)
+
+
+
+
+
 
 Execute o comando `docker-compose down` para parar o contêineres.
 
@@ -125,25 +186,5 @@ Removing atividade4_apigx01_1 ... done
 Removing network atividade4_proxygx-network
 ```
 
-Vamos agora esconder o nó que está executando a api e repetir os testes. Para isso, edite o arquivo docker-compose.yml, e remova a declaração da porta do nó apigx01     `ports: - "20001:80"`.
-
-```yaml
-  apigx01:
-    image: mkshimao/handsoncloudgx
-    networks:
-      - proxygx-network
-```
-
-Execute novamente o comando `docker-compose up -d`, e repita os testes com o Postman. Agora o teste da api dará erro pois não está publicado, apenas o Nginx estará respondendo. Se executarmos o comando `docker-compose ps` veremos que apenas a imagem do nginx está com a porta configurada.
-
-```bat
-HandsOnCloud\Atividade4
-λ docker-compose ps
-O sistema não pode encontrar o caminho especificado.
-        Name                      Command               State          Ports
-------------------------------------------------------------------------------------
-atividade4_apigx01_1   dotnet bin/GxNetCoreStartu ...   Up
-atividade4_proxy_1     nginx -g daemon off;             Up      0.0.0.0:9999->80/tcp
-```
 
 Próxima: [Atividade 05](05-atividade.md)
