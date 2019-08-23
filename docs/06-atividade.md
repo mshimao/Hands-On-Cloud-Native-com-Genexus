@@ -11,7 +11,7 @@ Para consultarmos os dados no Redis vamos usar um cliente free chamado FastoRedi
 Vamos usar o docker para executar o Redis, execute o comando `docker run --name redis13 -p 6379:6379 -d redis redis-server --appendonly no` para subir a imagem do Redis.
 
 ```bat
-C:\HandsOnCloud\Atividade5
+C:\HandsOnCloud\Atividade6
 λ docker run --name redis13 -p 6379:6379 -d redis redis-server --appendonly no
 Unable to find image 'redis:latest' locally
 latest: Pulling from library/redis
@@ -26,54 +26,57 @@ Status: Downloaded newer image for redis:latest
 f6c0581497bc7e8eeec5b8ad5b87f054270097ad418d32fd42c6f928b61bbab0
 ```
 
-Ao executar o comando `docker-compose ps` serão listados os contêineres criados.
+Execute o FastoRedis, clique em "Add Connection", clique em Ok e configure a conexão para o locahost na porta 6379 com o nome **dockerredis**. 
 
-```bat
-C:\HandsOnCloud\Atividade5>docker-compose ps
-           Name                          Command                State     Ports                                                                                         
--------------------------------------------------------------------------------                                                                                         
-atividade5_apigx01_1          dotnet bin/GxNetCoreStartu ...   Exit 255                                                                                                 
-atividade5_kong-database_1    docker-entrypoint.sh postgres    Exit 255                                                                                                 
-atividade5_kong-migration_1   /docker-entrypoint.sh kong ...   Exit 0                                                                                                   
-atividade5_kong_1             /docker-entrypoint.sh kong ...   Exit 255                                                                                                 
-atividade5_konga-prepare_1    /app/start.sh -c prepare - ...   Exit 0                                                                                                   
-atividade5_konga_1            /app/start.sh                    Exit 255                                                                          
+![FastoRedis](imagens/fastoredis.png)
+
+Após a criação da conexão selecionar a conexão e clicar em Open.
+
+![FastoRedisOpen](imagens/fastoredisopen.png)
+
+Agora vamos criar uma API Rest em .NET que ao ser chamada verifica que se a informação está armazenada no Redis, caso não exista o cache, ele busca a informação de um personagem de Star Wars, e armazena no Redis.
+
+A api que iremos acessar é a seguinte:
+
+- https://swapi.co/api/people/{id}
+
+O JSON retornado é a seguinte:
+
+```json
+{
+    "name": "Luke Skywalker",
+    "height": "172",
+    "mass": "77",
+    "hair_color": "blond",
+    "skin_color": "fair",
+    "eye_color": "blue",
+    "birth_year": "19BBY",
+    "gender": "male",
+    "homeworld": "https://swapi.co/api/planets/1/",
+    "films": [
+        "https://swapi.co/api/films/2/",
+        "https://swapi.co/api/films/6/",
+        "https://swapi.co/api/films/3/",
+        "https://swapi.co/api/films/1/",
+        "https://swapi.co/api/films/7/"
+    ],
+    "species": [
+        "https://swapi.co/api/species/1/"
+    ],
+    "vehicles": [
+        "https://swapi.co/api/vehicles/14/",
+        "https://swapi.co/api/vehicles/30/"
+    ],
+    "starships": [
+        "https://swapi.co/api/starships/12/",
+        "https://swapi.co/api/starships/22/"
+    ],
+    "created": "2014-12-09T13:50:51.644000Z",
+    "edited": "2014-12-20T21:17:56.891000Z",
+    "url": "https://swapi.co/api/people/1/"
+}
 ```
-Abra o browser e digite o endereço http://localhost:1337. Preencha os campos com as seguintes informações:
-- Username: admin
-- Email: admin@teste.com
-- Password: adminagl
 
-![konga](imagens/konga.png)
+- [Instruções para Genexus](06b-atividade.md)
 
-Para connectar a interface de Administração ao Kong, temos que configurar a conexão com a api de administração do Kong. Clique na opção CONNECTIONS do menu lateral e posteriomente no botão NEW CONNECTION.
-
-![konga connection](imagens/kongaconn.png)
-
-Preencha o nome com "Default" e a url com "http://kong:8001", clique em "CREATE CONNECTION".
-
-![konga default connection](imagens/kongadefaultconn.png)
-
-A conexão com o Kong deverá aparecer ativada.
-
-![konga default connection ok](imagens/kongaconnok.png)
-
-
-
-
-
-
-Execute o comando `docker-compose down` para parar o contêineres.
-
-```bat
-C:\HandsOnCloud\Atividade4
-λ docker-compose down
-Stopping atividade4_proxy_1   ... done
-Stopping atividade4_apigx01_1 ... done
-Removing atividade4_proxy_1   ... done
-Removing atividade4_apigx01_1 ... done
-Removing network atividade4_proxygx-network
-```
-
-
-Próxima: [Atividade 05](05-atividade.md)
+- [Instruções para Visual Studio](06c-Atividade)
