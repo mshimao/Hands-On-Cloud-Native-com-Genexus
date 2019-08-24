@@ -79,4 +79,4 @@ O JSON retornado é a seguinte:
 
 - [Instruções para Genexus](06b-atividade.md)
 
-- [Instruções para Visual Studio](06c-Atividade.md)
+- [Instruções para Visual Studio](06c-atividade.md)
