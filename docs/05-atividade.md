@@ -185,6 +185,7 @@ Informar os seguintes campos:
 - Host: apigx01
 - Port: 80
 - Path: /
+
 E clicar em "SUBMIT SERVICE".
 
 Após a criação do serviço, clicar no item apigx na lista de serviços. E clicar na opção Routes e depois no botão "ADD ROUTE".
@@ -251,4 +252,4 @@ Removing network atividade5_kong-net
 ```
 
 
-Próxima: [Atividade 05](05-atividade.md)
+Próxima: [Atividade 06](06-atividade.md)
