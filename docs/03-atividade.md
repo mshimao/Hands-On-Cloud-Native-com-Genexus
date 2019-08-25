@@ -25,4 +25,6 @@ Apresente quais práticas e ferramentas seriam necessárias para implementar os 
 
 - [Site da Metodologia doze-fatores](https://12factor.net/pt_br/)
 
+- [Wikipedia - Metodologia Twelve-Factor App](https://pt.wikipedia.org/wiki/Metodologia_Twelve-Factor_App)
+
 Próxima: [Atividade 04](04-atividade.md)
