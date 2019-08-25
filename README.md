@@ -22,10 +22,8 @@ Após a leitura e configuração dos requisitos, agora é fazer o download do Do
 
 Com isso temos o ambiente preparado para executar os contêineres Docker.
 
-## Genexus .NET Core
+## Genexus e Gerador .NET 
 
-Para este Hands-On vamos utilizar também o Genexus 16 e o gerador .Net Core, então é necessário instalar os requisitos do gerador.
-
-- [Requisitos do Gerador .Net Core](https://wiki.genexus.com/commwiki/servlet/wiki?38605,.Net+Core+Generator+Requirements)
+Para este Hands-On vamos utilizar também o Genexus 16 e gerador .NET.
 
 Próximo: [Atividade 01](docs/01-atividade.md)
