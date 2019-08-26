@@ -18,3 +18,4 @@ Implemente a Web API recebendo um parâmetro Id que será passado para a chamada
 
 Após terminar de desenvolver a Web API, teste usando o Postman e o FastoRedis para verificar se os valores estão sendo gravados no Redis.
 
+Próxima: [Atividade 07](07-atividade.md)
