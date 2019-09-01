@@ -12,6 +12,6 @@ Seguem alguns recursos para entender melhor os conceitos que foram apresentados.
 
 ![ebook .NET Microservices](imagens/cover-small.png)
 
-Slides apresentados.
+##Slides apresentados.
 
 - [Slides do treinamento](pdfs/Hands_On_Cloud_Native.pdf)
